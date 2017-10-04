@@ -21,6 +21,8 @@
  * @brief entry points (booting, reset, exceptions) for ARMv8 family
  */
 
+#define	PINE64_USE_X2_DTB_REG_FIXUP
+
 #include <cpu_defines.h>
 #include <mmu_lpae.h>
 
@@ -49,6 +51,10 @@ _start:
 	ldr	x7, __exec_end
 	sub	x3, x7, x6
 	add	x5, x4, x3
+	/* Pine64 u-boot (apritzel) passed DTB address in w2 */
+#ifdef	PINE64_USE_X2_DTB_REG_FIXUP
+	mov	x0, x2
+#endif
 
 	/* Save boot reg0 (i.e. x0) */
 	ldr	x3, __boot_reg0
